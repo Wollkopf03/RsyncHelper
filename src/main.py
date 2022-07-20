@@ -9,6 +9,8 @@ def sync(download):
         print(output.decode("utf-8") + "\n---------------------------------------------------------\n")
     else:
         print("Error:\n" + error.decode("utf-8") + "\n---------------------------------------------------------\n")
+        bashCommand = ["./signal/bin/signal-cli", "-a", "<SENDER>", "send", "-m", "Error: " + error.decode("utf-8"), "<RECEIVER>"]
+        process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def main(args):
     if (len(args) != 2 or args[0] != "-p"):
