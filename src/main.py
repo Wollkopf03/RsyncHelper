@@ -20,7 +20,12 @@ def sync(download):
             dirs.append(x[0])
     if len(dirs) > download["days"]:
         rename(dirs, download["destination_path"])
-    output, error = cmd("rsync -azP --exclude=" + download["filters"]["exclude_pattern"] +  " --include=" + download["filters"]["include_pattern"] + " " + download["source_path"] + " " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()) + "/")
+    bashCommand = ["rsync", download["source_path"], download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()) + "/"]
+    i = 1
+    for arg in download["flags"]:
+        bashCommand.insert(i, arg)
+        i += 1
+    output, error = cmd(bashCommand)
     if error != b'':
         bashCommand = ["./signal/bin/signal-cli", "-a", "<SENDER>", "send", "-m", "Error: " + error.decode("utf-8"), "<RECEIVER>"]
         process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
