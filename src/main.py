@@ -1,14 +1,27 @@
 import subprocess, json, sys
+import glob
+import os
+import time
+from utils import *
+
+def rename(dirs, dest):
+    dates = []
+    for dir in dirs:
+        dates.append(time.strptime(dir.split("/")[1], "%Y_%m_%d"))
+        for file in glob.glob(dest + time.strftime("%Y_%m_%d", min(dates)) + "/*"):
+            cmd("mv " + file + " " + dest + time.strftime("%Y_%m_%d", time.localtime())) # TODO
+    cmd("rmdir " + dest + time.strftime("%Y_%m_%d", min(dates)))
 
 def sync(download):
-    bashCommand = "rsync -azP --exclude=" + download["filters"]["exclude_pattern"] +  " --include=" + download["filters"]["include_pattern"] + " " + download["source_path"] + " " + download["destination_path"]
-    process = subprocess.run(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output = process.stdout
-    error = process.stderr
-    if error == b'':
-        print(output.decode("utf-8") + "\n---------------------------------------------------------\n")
-    else:
-        print("Error:\n" + error.decode("utf-8") + "\n---------------------------------------------------------\n")
+    dirs = []
+    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()))
+    for x in os.walk(download["destination_path"]):
+        if x[0] != download["destination_path"]:
+            dirs.append(x[0])
+    if len(dirs) > download["days"]:
+        rename(dirs, download["destination_path"])
+    output, error = cmd("rsync -azP --exclude=" + download["filters"]["exclude_pattern"] +  " --include=" + download["filters"]["include_pattern"] + " " + download["source_path"] + " " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()) + "/")
+    if error != b'':
         bashCommand = ["./signal/bin/signal-cli", "-a", "<SENDER>", "send", "-m", "Error: " + error.decode("utf-8"), "<RECEIVER>"]
         process = subprocess.Popen(bashCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
