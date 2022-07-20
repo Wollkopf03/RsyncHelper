@@ -1,6 +1,9 @@
 import subprocess
 from inspect import currentframe, getframeinfo
+import logging
+import time
 
+logging.basicConfig(filename='rsync.log', level=logging.DEBUG)
 
 def cmd(bashCommand):
     if type(bashCommand) == list:
@@ -11,6 +14,14 @@ def cmd(bashCommand):
     print("------------Begin-Command------------\n" + str(bashCommand))
     print("Output: " + output.decode("utf-8") + "\nError: " + error.decode("utf-8"))
     print("-------------End-Command-------------")
+    logging.info("------------Begin-Command------------")
+    logging.info("Timestamp: " + time.strftime("%H:%M:%S %z", time.localtime()))
+    logging.info("Command: " + str(bashCommand))
+    if error == b'':
+        logging.info(output.decode("utf-8"))
+    else:
+        logging.error(error.decode("utf-8"))
+    logging.info("-------------End-Command-------------")
     return (output, error)
 
 def debug(dbgMsg):
