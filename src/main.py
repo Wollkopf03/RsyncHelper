@@ -7,7 +7,7 @@ from utils import *
 def rename(dirs, dest):
     dates = []
     for dir in dirs:
-        dates.append(time.strptime(dir.split("/")[1], "%Y_%m_%d"))
+        dates.append(time.strptime(dir.split("/")[-1], "%Y_%m_%d"))
         for file in glob.glob(dest + time.strftime("%Y_%m_%d", min(dates)) + "/*"):
             cmd("mv " + file + " " + dest + time.strftime("%Y_%m_%d", time.localtime())) # TODO
     cmd("rmdir " + dest + time.strftime("%Y_%m_%d", min(dates)))
