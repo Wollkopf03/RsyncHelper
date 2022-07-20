@@ -11,5 +11,5 @@ def cmd(bashCommand):
     return (output, error)
 
 def debug(dbgMsg):
-    frameinfo = getframeinfo(currentframe())
-    print(frameinfo.filename + "(" + frameinfo.lineno + ")" + ": " + dbgMsg)
+    frameinfo = getframeinfo(currentframe().f_back)
+    print(frameinfo.filename + "(" + str(frameinfo.lineno) + ")" + ": " + dbgMsg)
