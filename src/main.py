@@ -2,12 +2,13 @@ import subprocess, json, sys
 
 def sync(download):
     bashCommand = "rsync -azP --exclude=" + download["filters"]["exclude_pattern"] +  " --include=" + download["filters"]["include_pattern"] + " " + download["source_path"] + " " + download["destination_path"]
-    process = subprocess.Popen(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    output, error = process.communicate()
+    process = subprocess.run(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    output = process.stdout
+    error = process.stderr
     if error == b'':
-        print(output + "\n---------------------------------------------------------\n")
+        print(output.decode("utf-8") + "\n---------------------------------------------------------\n")
     else:
-        print("Error:\n" + error + "\n---------------------------------------------------------\n")
+        print("Error:\n" + error.decode("utf-8") + "\n---------------------------------------------------------\n")
 
 def main(args):
     if (len(args) != 2 or args[0] != "-p"):
