@@ -4,10 +4,7 @@
             "source_path": "/path/to/source/file/",
             "destination_path": "/path/to/dest/file/",
             "days": 3,
-            "filters": {
-                "include_pattern": "",
-                "exclude_pattern": ""
-            }
+            "flags": ["-the", "-flags", "-you", "-want", "-to", "-use"]
         }
     ]
 }
