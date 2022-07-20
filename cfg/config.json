@@ -1,0 +1,12 @@
+{
+    "downloads": [
+        {
+            "source_path": "/path/to/source/file/",
+            "destination_path": "/path/to/dest/file/",
+            "filters": {
+                "include_pattern": "",
+                "exclude_pattern": ""
+            }
+        }
+    ]
+}
