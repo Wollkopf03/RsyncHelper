@@ -21,7 +21,7 @@ def cmd(bashCommand, printLog = True, logging = True):
         print("-------------End-Command-------------")
     if logging:
         log.info("------------Begin-Command------------")
-        log.info("Timestamp: " + time.strftime("%H:%M:%S %z", time.localtime()))
+        log.info("Timestamp: " + time())
         log.info("Command: " + str(bashCommand))
         if error == b'':
             log.info(output.decode("utf-8"))
