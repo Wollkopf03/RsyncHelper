@@ -1,7 +1,4 @@
-import subprocess, json, sys
-import glob
-import os
-import time
+import json, sys, glob, os, time
 from utils import *
 from download import Download
 
