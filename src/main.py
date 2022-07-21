@@ -14,7 +14,7 @@ def rename(dirs, dest):
 
 def sync(download):
     dirs = []
-    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()))
+    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()), False, False)
     for x in os.walk(download["destination_path"]):
         if x[0] != download["destination_path"]:
             dirs.append(x[0])
@@ -35,8 +35,9 @@ def main(args):
         print("Usage:\n python main.py -p <path_to_config_file>");
         return
     with open(args[1], 'r') as f:
-        downloads = json.load(f)["downloads"]
-    for download in downloads:
+        file = json.load(f)
+    init_logging_path(file["logging_path"])
+    for download in file["downloads"]:
         sync(download)
 
 if __name__ == "__main__":

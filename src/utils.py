@@ -1,27 +1,30 @@
 import subprocess
 from inspect import currentframe, getframeinfo
-import logging
+import logging as log
 import time
 
-logging.basicConfig(filename='rsync.log', level=logging.DEBUG)
+def init_logging_path(logging_path):
+    log.basicConfig(filename=logging_path, level=log.DEBUG)
 
-def cmd(bashCommand):
+def cmd(bashCommand, printLog = True, logging = True):
     if type(bashCommand) == list:
         process = subprocess.run(bashCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         process = subprocess.run(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.stdout, process.stderr
-    print("------------Begin-Command------------\n" + str(bashCommand))
-    print("Output: " + output.decode("utf-8") + "\nError: " + error.decode("utf-8"))
-    print("-------------End-Command-------------")
-    logging.info("------------Begin-Command------------")
-    logging.info("Timestamp: " + time.strftime("%H:%M:%S %z", time.localtime()))
-    logging.info("Command: " + str(bashCommand))
-    if error == b'':
-        logging.info(output.decode("utf-8"))
-    else:
-        logging.error(error.decode("utf-8"))
-    logging.info("-------------End-Command-------------")
+    if printLog:
+        print("------------Begin-Command------------\n" + str(bashCommand))
+        print("Output: " + output.decode("utf-8") + "\nError: " + error.decode("utf-8"))
+        print("-------------End-Command-------------")
+    if logging:
+        log.info("------------Begin-Command------------")
+        log.info("Timestamp: " + time.strftime("%H:%M:%S %z", time.localtime()))
+        log.info("Command: " + str(bashCommand))
+        if error == b'':
+            log.info(output.decode("utf-8"))
+        else:
+            log.error(error.decode("utf-8"))
+        log.info("-------------End-Command-------------")
     return (output, error)
 
 def debug(dbgMsg):
