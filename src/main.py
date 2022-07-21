@@ -3,26 +3,27 @@ import glob
 import os
 import time
 from utils import *
+from download import Download
 
 def rename(dirs, dest):
     dates = []
     for dir in dirs:
         dates.append(time.strptime(dir.split("/")[-1], "%Y_%m_%d"))
         for file in glob.glob(dest + time.strftime("%Y_%m_%d", min(dates)) + "/*"):
-            cmd("mv " + file + " " + dest + time.strftime("%Y_%m_%d", time.localtime())) # TODO
+            cmd("mv " + file + " " + dest + time.strftime("%Y_%m_%d", time.localtime()))
     cmd("rmdir " + dest + time.strftime("%Y_%m_%d", min(dates)))
 
-def sync(download):
+def sync(download: Download):
     dirs = []
-    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()), False, False)
-    for x in os.walk(download["destination_path"]):
-        if x[0] != download["destination_path"]:
+    cmd("mkdir " + download.destination_path + time.strftime("%Y_%m_%d", time.localtime()), False, False)
+    for x in os.walk(download.destination_path):
+        if x[0] != download.destination_path:
             dirs.append(x[0])
-    if len(dirs) > download["days"]:
-        rename(dirs, download["destination_path"])
-    bashCommand = ["rsync", download["source_path"], download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()) + "/"]
+    if len(dirs) > download.days:
+        rename(dirs, download.destination_path)
+    bashCommand = ["rsync", download.source_path, download.destination_path + time.strftime("%Y_%m_%d", time.localtime()) + "/"]
     i = 1
-    for arg in download["flags"]:
+    for arg in download.flags:
         bashCommand.insert(i, arg)
         i += 1
     output, error = cmd(bashCommand)
@@ -38,7 +39,7 @@ def main(args):
         file = json.load(f)
     init_logging_path(file["logging_path"])
     for download in file["downloads"]:
-        sync(download)
+        sync(Download(download))
 
 if __name__ == "__main__":
     main(sys.argv[1:])
