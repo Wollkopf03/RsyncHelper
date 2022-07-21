@@ -1,7 +1,10 @@
 import subprocess
 from inspect import currentframe, getframeinfo
 import logging as log
-import time
+import time as tm
+
+def time(time = tm.localtime()):
+    return tm.strftime("%Y_%m_%d", time)
 
 def init_logging_path(logging_path):
     log.basicConfig(filename=logging_path, level=log.DEBUG)

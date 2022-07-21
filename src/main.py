@@ -9,19 +9,19 @@ def rename(dirs, dest):
     dates = []
     for dir in dirs:
         dates.append(time.strptime(dir.split("/")[-1], "%Y_%m_%d"))
-        for file in glob.glob(dest + time.strftime("%Y_%m_%d", min(dates)) + "/*"):
-            cmd("mv " + file + " " + dest + time.strftime("%Y_%m_%d", time.localtime()))
-    cmd("rmdir " + dest + time.strftime("%Y_%m_%d", min(dates)))
+        for file in glob.glob(dest + time(min(dates)) + "/*"):
+            cmd("mv " + file + " " + dest + time())
+    cmd("rmdir " + dest + time(min(dates)))
 
 def sync(download: Download):
     dirs = []
-    cmd("mkdir " + download.destination_path + time.strftime("%Y_%m_%d", time.localtime()), False, False)
+    cmd("mkdir " + download.destination_path + time(), False, False)
     for x in os.walk(download.destination_path):
         if x[0] != download.destination_path:
             dirs.append(x[0])
     if len(dirs) > download.days:
         rename(dirs, download.destination_path)
-    bashCommand = ["rsync", download.source_path, download.destination_path + time.strftime("%Y_%m_%d", time.localtime()) + "/"]
+    bashCommand = ["rsync", download.source_path, download.destination_path + time() + "/"]
     i = 1
     for arg in download.flags:
         bashCommand.insert(i, arg)
