@@ -6,13 +6,13 @@ import time
 def init_logging_path(logging_path):
     log.basicConfig(filename=logging_path, level=log.DEBUG)
 
-def cmd(bashCommand, output = True, logging = True):
+def cmd(bashCommand, printLog = True, logging = True):
     if type(bashCommand) == list:
         process = subprocess.run(bashCommand, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         process = subprocess.run(bashCommand.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = process.stdout, process.stderr
-    if output:
+    if printLog:
         print("------------Begin-Command------------\n" + str(bashCommand))
         print("Output: " + output.decode("utf-8") + "\nError: " + error.decode("utf-8"))
         print("-------------End-Command-------------")
