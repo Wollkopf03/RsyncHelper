@@ -14,7 +14,8 @@ def rename(dirs, dest):
 
 def sync(download):
     dirs = []
-    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()))
+    init_logging_path(download["logging_path"])
+    cmd("mkdir " + download["destination_path"] + time.strftime("%Y_%m_%d", time.localtime()), False, False)
     for x in os.walk(download["destination_path"]):
         if x[0] != download["destination_path"]:
             dirs.append(x[0])
