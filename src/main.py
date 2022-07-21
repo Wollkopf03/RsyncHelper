@@ -1,4 +1,4 @@
-import subprocess, json, sys
+import json, sys
 import glob
 import os
 import time
