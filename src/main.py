@@ -35,9 +35,15 @@ def main(args):
         return
     with open(args[1], 'r') as f:
         file = json.load(f)
-    init_logging_path(file["logging_path"])
+    init_logging_path(file["logging_path"] + "rsync_" + time() + ".log")
     for download in file["downloads"]:
         sync(Download(download))
+    dates = []
+    for dir in os.listdir(file["logging_path"]):
+        if dir.endswith(".log") and dir.startswith("rsync_"):
+            dates.append(tm.strptime(dir.replace("rsync_", "").replace(".log", ""), "%Y_%m_%d"))
+    if len(dates) > 3:
+        cmd("rm " + file["logging_path"] + "rsync_" + time(min(dates)) + ".log")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
