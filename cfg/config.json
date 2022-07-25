@@ -1,5 +1,7 @@
 {
     "logging_path": "/path/to/logging/folder/",
+    "sender": "number_of_sognal_account",
+    "recipient": "number_of_sognal_account",
     "downloads": [
         {
             "source_path": "/path/to/source/file/",
