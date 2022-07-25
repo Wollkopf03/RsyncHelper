@@ -1,11 +1,11 @@
-import json, sys, glob, os, time
+import json, sys, glob, os, time as tm
 from utils import *
 from download import Download
 
 def rename(dirs, dest):
     dates = []
     for dir in dirs:
-        dates.append(time.strptime(dir.split("/")[-1], "%Y_%m_%d"))
+        dates.append(tm.strptime(dir.split("/")[-1], "%Y_%m_%d"))
         for file in glob.glob(dest + time(min(dates)) + "/*"):
             cmd("mv " + file + " " + dest + time())
     cmd("rmdir " + dest + time(min(dates)))
