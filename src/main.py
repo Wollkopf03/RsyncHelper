@@ -24,6 +24,8 @@ def sync(download: Download):
         rsyncCommand.insert(i, arg)
         i += 1
     output, error = cmd(rsyncCommand)
+    if not os.path.exists(download.destination_path + time() + "/" + download.destination_path.split("/")[-2]):
+        cmd(["./signal/bin/signal-cli", "-a", "<SENDER>", "send", "-m", "Error: Missing file:" + download.destination_path + time() + "/" + download.destination_path.split("/")[-2], "<RECEIVER>"])
     if error != b'':
         cmd(["./signal/bin/signal-cli", "-a", "<SENDER>", "send", "-m", "Error: " + error.decode("utf-8"), "<RECEIVER>"])
 
