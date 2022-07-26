@@ -10,7 +10,7 @@ def rename(dirs, dest):
             cmd("mv " + file + " " + dest + time())
     cmd("rmdir " + dest + time(min(dates)))
 
-def sync(download: Download, sender: str, recipient: str):
+def sync(download: Download, signal_home: str, sender: str, recipients: list):
     dirs = []
     cmd("mkdir " + download.destination_path + time(), False, False)
     for x in os.walk(download.destination_path):
@@ -25,9 +25,11 @@ def sync(download: Download, sender: str, recipient: str):
         i += 1
     output, error = cmd(rsyncCommand)
     if not os.path.exists(download.destination_path + time() + "/" + download.destination_path.split("/")[-2]):
-        cmd(["./signal/bin/signal-cli", "-a", sender, "send", "-m", "Error: Missing file:" + download.destination_path + time() + "/" + download.destination_path.split("/")[-2], recipient])
+        for recipient in recipients:
+            cmd([signal_home, "-a", sender, "send", "-m", "Error: Missing file:" + download.destination_path + time() + "/" + download.destination_path.split("/")[-2], recipient])
     if error != b'':
-        cmd(["./signal/bin/signal-cli", "-a", sender, "send", "-m", "Error: " + error.decode("utf-8"), recipient])
+        for recipient in recipients:
+            cmd([signal_home, "-a", sender, "send", "-m", "Error: " + error.decode("utf-8"), recipient])
 
 def main(args):
     if (len(args) != 2 or args[0] != "-p"):
@@ -37,7 +39,7 @@ def main(args):
         file = json.load(f)
     init_logging_path(file["logging_path"] + "rsync_" + time() + ".log")
     for download in file["downloads"]:
-        sync(Download(download), file["sender"], file["recipient"])
+        sync(Download(download), file["signal_home"], file["sender"], file["recipients"])
     dates = []
     for dir in os.listdir(file["logging_path"]):
         if dir.endswith(".log") and dir.startswith("rsync_"):

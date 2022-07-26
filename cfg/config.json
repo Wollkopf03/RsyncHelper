@@ -1,13 +1,23 @@
 {
     "logging_path": "/path/to/logging/folder/",
     "sender": "number_of_sognal_account",
-    "recipient": "number_of_sognal_account",
+    "recipients": [
+        "number_of_sognal_account"
+    ],
+    "signal_home": "/path/to/signale/bin/signal-cli",
     "downloads": [
         {
             "source_path": "/path/to/source/file/",
             "destination_path": "/path/to/dest/file/",
             "days": 3,
-            "flags": ["-the", "-flags", "-you", "-want", "-to", "-use"]
+            "flags": [
+                "-the",
+                "-flags",
+                "-you",
+                "-want",
+                "-to",
+                "-use"
+            ]
         }
     ]
 }
