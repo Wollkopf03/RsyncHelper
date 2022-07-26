@@ -1,8 +1,8 @@
 {
     "logging_path": "/path/to/logging/folder/",
-    "sender": "number_of_sognal_account",
+    "sender": "number_of_signal_account",
     "recipients": [
-        "number_of_sognal_account"
+        "number_of_signal_account"
     ],
     "signal_home": "/path/to/signale/bin/signal-cli",
     "downloads": [
