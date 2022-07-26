@@ -45,7 +45,7 @@ def main(args):
     if len(dates) > 3:
         cmd("rm " + file["logging_path"] + "rsync_" + time(min(dates)) + ".log")
     with open(file["logging_path"] + "rsync_" + time() + ".log", "a") as f:
-        f.write("Done!")
+        f.write("Done!\n")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
