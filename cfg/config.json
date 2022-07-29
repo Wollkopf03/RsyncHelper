@@ -9,6 +9,7 @@
         {
             "source_path": "/path/to/source/file/",
             "destination_path": "/path/to/dest/file/",
+            "diff_files_destination_path": "/path/to/diff/dir/",
             "days": 3,
             "flags": [
                 "-the",

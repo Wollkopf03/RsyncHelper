@@ -28,6 +28,7 @@ def sync(download: Download, signal_home: str, sender: str, recipients: list):
         rsyncCommand.insert(i, arg)
         i += 1
     output, error = cmd(rsyncCommand)
+    cmd(["xdelta3", "-e", "-s", download.destination_path + time() + "/" + download.destination_path.split("/")[-2], download.destination_path + datetime.strftime(datetime.now() - timedelta(1), "%Y_%m_%d") + "/" + download.destination_path.split("/")[-2], download.diff_files_destination_path + download.destination_path.split("/")[-2] + "-" + time() + "-" +  datetime.strftime(datetime.now() - timedelta(1), "%Y_%m_%d")])
     if not os.path.exists(download.destination_path + time() + "/" + download.destination_path.split("/")[-2]):
         for recipient in recipients:
             cmd([signal_home, "-a", sender, "send", "-m", "Error: Missing file:" + download.destination_path + time() + "/" + download.destination_path.split("/")[-2], recipient])
