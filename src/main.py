@@ -1,6 +1,7 @@
 import json, sys, glob, os, time as tm
 from utils import *
 from download import Download
+from datetime import datetime, timedelta
 
 def rename(dirs, dest):
     dates = []
@@ -12,12 +13,15 @@ def rename(dirs, dest):
 
 def sync(download: Download, signal_home: str, sender: str, recipients: list):
     dirs = []
+    cmd("mkdir " + download.destination_path, False, False)
     cmd("mkdir " + download.destination_path + time(), False, False)
     for x in os.walk(download.destination_path):
         if x[0] != download.destination_path:
             dirs.append(x[0])
     if len(dirs) > download.days:
         rename(dirs, download.destination_path)
+    elif len(dirs) > 1:
+        cmd(["cp", download.destination_path + datetime.strftime(datetime.now() - timedelta(1), "%Y_%m_%d") + "/" + download.destination_path.split("/")[-2], download.destination_path + time() + "/" + download.destination_path.split("/")[-2]])
     rsyncCommand = ["rsync", download.source_path, download.destination_path + time() + "/"]
     i = 1
     for arg in download.flags:
